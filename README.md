@@ -26,26 +26,27 @@ Or install it yourself as:
 
 ## Usage
 
-To reindex associted records just add reindex: options to any ActiveRecord association.
-Acceptable values are `true, :async`.
+  To reindex associted records just add reindex: options to any ActiveRecord association.
+  Acceptable values are `true, :async`.
 
-It will hook on:
-1. record update
-2. record destroy
-3. record reindex
+  It will hook on:
 
-and reindex records reflected in given association.
+    1. record update
+    2. record destroy
+    3. record reindex
 
-Reindexing strategy will depend on specified reindex value.
+  and reindex records reflected in given association.
 
-```ruby
-reindex: true # associated in given association records will be reindexed in the same time as
-              # current record was updated\destroy\reindexed(Syncronously)
-```
+  Reindexing strategy will depend on specified reindex value.
 
-```ruby
-reindex: :async # records will be reindexed (Asyncronously) using ActiveJob as adapter.
-```
+  ```ruby
+  reindex: true # associated in given association records will be reindexed in the same time as
+                # current record was updated\destroy\reindexed(Syncronously)
+  ```
+
+  ```ruby
+  reindex: :async # records will be reindexed (Asyncronously) using ActiveJob as adapter.
+  ```
 
 ## Examples
 
