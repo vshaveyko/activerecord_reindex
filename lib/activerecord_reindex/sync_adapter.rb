@@ -8,7 +8,8 @@ class ActiveRecordReindex::SyncAdapter < ActiveRecordReindex::Adapter
 
     # updates index directly in elasticsearch through
     # Elasticsearch::Model instance method
-    # if class not inherited from Elasticsearch::Model it raises error
+    # if class not inherited from Elasticsearch::Model it skips since it cannot be reindexing
+    # TODO: show error\warning about trying to reindex record that is not connection to elastic
     def call(record)
       return unless _check_elasticsearch_connection(record.class)
       record.update_index

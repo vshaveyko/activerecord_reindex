@@ -2,6 +2,9 @@
 # author: Vadim Shaveiko <@vshaveyko>
 # Asyncronouse reindex adapter
 # uses Jobs for reindexing records asyncronously
+# Using ActiveJob as dependency bcs activerecord is required for this those
+# in most cases it would be used with rails hence with ActiveJob
+# later can think about adding support for differnt job adapters
 require_relative 'adapter'
 class ActiveRecordReindex::AsyncAdapter < ActiveRecordReindex::Adapter
 

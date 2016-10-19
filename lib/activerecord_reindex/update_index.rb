@@ -4,6 +4,8 @@ module Elasticsearch::Model
 
   alias original_update_index update_index
 
+  # monkey patch update_document method from elasticsearch gem
+  # use +super+ and hook on reindex to reindex associations
   def update_document(*args)
     original_update_index(*args)
     return unless _active_record_model?(self.class)
