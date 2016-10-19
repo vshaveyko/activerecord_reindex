@@ -2,8 +2,8 @@
 # author: Vadim Shaveiko <@vshaveyko>
 # Asyncronouse reindex adapter
 # uses Jobs for reindexing records asyncronously
-# any additional adapter provided must implement :call method
-class ActiveRecordReindex::AsyncAdapter
+require_relative 'adapter'
+class ActiveRecordReindex::AsyncAdapter < ActiveRecordReindex::Adapter
 
   # Job wrapper. Queues elastic_index queue for each reindex
   class UpdateJob < ActiveJob::Base
@@ -21,13 +21,8 @@ class ActiveRecordReindex::AsyncAdapter
   class << self
 
     def call(record)
-      _check_elasticsearch_connection(record.class)
+      return unless _check_elasticsearch_connection(record.class)
       UpdateJob.perform_later(record.class, record.id)
-    end
-
-    def _check_elasticsearch_connection(klass)
-      return if klass.ancestors.map(&:to_s).include?('Elasticsearch::Model')
-      raise StandardError, "Class #{record.class} must include Elasticsearch::Model to provide reindexing methods."
     end
 
   end
