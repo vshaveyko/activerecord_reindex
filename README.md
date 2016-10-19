@@ -1,6 +1,6 @@
 # ActiverecordReindex
 
-Add reindex option to ActiveRecord associations
+Add Elasticsearch reindex option to ActiveRecord associations
 
 ## Installation
 
