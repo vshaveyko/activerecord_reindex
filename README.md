@@ -26,7 +26,7 @@ Or install it yourself as:
 
 ## Usage
 
-  To reindex associted records just add reindex: options to any ActiveRecord association.  
+  To reindex associted records just add reindex: options to any ActiveRecord association.
   Acceptable values are `true, :async`.
 
   It will hook on:
@@ -78,7 +78,7 @@ If record of Tag model was updated then:
 
 If record of Tagging model was updated then:
 1. associated tag will be Syncronously reindexed
-2. all associated taggings will be Asyncronously reindexed
+2. all associated taggings(except the one that initiated reindex) will be Asyncronously reindexed
 
 If record of SuperTagging model was updated then:
 1. associated tag will be Syncronously reindexed

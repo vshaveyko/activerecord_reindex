@@ -16,12 +16,16 @@ class ActiverecordReindex::Reindexer
   #   get all associated recrods and reindex them
   # else
   #   reindex given record associted one
-  def call(record, association_name:, collection?:)
+  def call(record, association_name:, collection?:, skip_record:)
     if collection?
-      record.public_send(association_name).each { |associated_record| update_index(associated_record) }
+      record.public_send(association_name).each do |associated_record|
+        next if associated_record == skip_record
+        update_index(associated_record, record)
+      end
     else
       associated_record = record.public_send(association_name)
-      update_index(associated_record)
+      return if associated_record == skip_record
+      update_index(associated_record, record)
     end
   end
 
@@ -31,10 +35,10 @@ class ActiverecordReindex::Reindexer
   # raise if strategy was not specified or doesn't respond to call which is required for strategy
   # pass record to strategy and execute reindex
   # clear strategy to not mess up future reindexing
-  def update_index(associated_record)
+  def update_index(associated_record, record)
     check_strategy
 
-    @strategy.call(associated_record)
+    @strategy.call(associated_record, record)
 
     clear_strategy
   end

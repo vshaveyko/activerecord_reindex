@@ -23,16 +23,18 @@ class ActiveRecord::Base
 
   private
 
-  def _reindex_async(reflection)
+  # reindex reflection associations record skipping skip_record if applicable
+  # for why we need to skip some records see sync_adapter.rb doc
+  def _reindex_async(reflection, skip_record: nil)
     self.class.reindexer
         .with_strategy(self.class.async_adapter)
-        .call(self, association_name: reflection.name, collection?: reflection.collection?)
+        .call(self, association_name: reflection.name, collection?: reflection.collection?, skip_record: skip_record)
   end
 
-  def _reindex_sync(reflection)
+  def _reindex_sync(reflection, skip_record: nil)
     self.class.reindexer
         .with_strategy(self.class.sync_adapter)
-        .call(self, association_name: reflection.name, collection?: reflection.collection?)
+        .call(self, association_name: reflection.name, collection?: reflection.collection?, skip_record: skip_record)
   end
 
 end
