@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+# author: Vadim Shaveiko <@vshaveyko>
 # Abstract adapter class
 # New adapters should implement :call method that will perform reindexing of the given record
 # Example:

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 # author: Vadim Shaveiko <@vshaveyko>
-# :nodoc:
 module Elasticsearch::Model
 
   alias original_update_index update_index

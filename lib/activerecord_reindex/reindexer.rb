@@ -1,8 +1,10 @@
-# :nodoc:
+# frozen_string_literal: true
+# author: Vadim Shaveiko <@vshaveyko>
 class ActiverecordReindex::Reindexer
 
   def with_strategy(strategy)
     @strategy = strategy
+    self
   end
 
   def call(record, association_name:, collection?:)

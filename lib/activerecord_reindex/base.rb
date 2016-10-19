@@ -10,7 +10,9 @@ require_relative 'reindexer'
 class ActiveRecord::Base
 
   class << self
+
     attr_accessor :reindexer, :async_adapter, :sync_adapter, :sync_reindexable_reflections, :async_reindexable_reflections
+
   end
 
   self.reindexer = ActiveRecordReindex::Reindexer.new
