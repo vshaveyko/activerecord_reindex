@@ -26,7 +26,7 @@ Or install it yourself as:
 
 ## Usage
 
-  To reindex associted records just add reindex: options to any ActiveRecord association.
+  To reindex associted records just add reindex: options to any ActiveRecord association.  
   Acceptable values are `true, :async`.
 
   It will hook on:
