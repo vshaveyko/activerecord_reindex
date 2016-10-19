@@ -28,13 +28,13 @@ class ActiveRecord::Base
   def _reindex_async(reflection, skip_record: nil)
     self.class.reindexer
         .with_strategy(self.class.async_adapter)
-        .call(self, association_name: reflection.name, collection?: reflection.collection?, skip_record: skip_record)
+        .call(self, reflection: reflection, skip_record: skip_record)
   end
 
   def _reindex_sync(reflection, skip_record: nil)
     self.class.reindexer
         .with_strategy(self.class.sync_adapter)
-        .call(self, association_name: reflection.name, collection?: reflection.collection?, skip_record: skip_record)
+        .call(self, reflection: reflection, skip_record: skip_record)
   end
 
 end

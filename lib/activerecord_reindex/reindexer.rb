@@ -16,14 +16,14 @@ class ActiverecordReindex::Reindexer
   #   get all associated recrods and reindex them
   # else
   #   reindex given record associted one
-  def call(record, association_name:, collection?:, skip_record:)
-    if collection?
-      record.public_send(association_name).each do |associated_record|
+  def call(record, reflection:, skip_record:)
+    if reflection.collection?
+      record.public_send(reflection.association_name).each do |associated_record|
         next if associated_record == skip_record
         update_index(associated_record, record)
       end
     else
-      associated_record = record.public_send(association_name)
+      associated_record = record.public_send(reflection.association_name)
       return if associated_record == skip_record
       update_index(associated_record, record)
     end
