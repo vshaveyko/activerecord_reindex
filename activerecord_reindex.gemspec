@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{lib}/**/*', 'LICENSE', 'README.rdoc']
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'activerecord'
+  spec.add_dependency 'activerecord', '~>5.0'
   spec.add_dependency 'activejob'
   spec.add_dependency 'elasticsearch-model'
 end
