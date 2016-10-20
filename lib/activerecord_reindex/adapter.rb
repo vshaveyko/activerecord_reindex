@@ -6,13 +6,16 @@
 #   def call(record)
 #     reindex_it(record)
 #   end
-class ActiverecordReindex::Adapter
+module ActiverecordReindex
+  class Adapter
 
-  # check if record of this class can be reindexed
-  # check if klass inherits from elasticsearch-model base class
-  # and have method required for reindexing
-  def self._check_elasticsearch_connection(klass)
-    klass < Elasticsearch::Model
+    # check if record of this class can be reindexed
+    # check if klass inherits from elasticsearch-model base class
+    # and have method required for reindexing
+    def self._check_elasticsearch_connection(klass)
+      klass < Elasticsearch::Model
+    end
+
   end
 
 end
