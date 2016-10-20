@@ -2,7 +2,9 @@
 # author: Vadim Shaveiko <@vshaveyko>
 require 'activerecord_reindex/version'
 
-require 'activerecord_reindex/base'
+require 'active_record'
+require 'active_job'
+require 'elasticsearch/model'
 
 require 'activerecord_reindex/association'
 require 'activerecord_reindex/association_reflection'
