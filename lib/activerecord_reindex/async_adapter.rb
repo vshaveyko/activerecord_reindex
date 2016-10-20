@@ -6,10 +6,10 @@
 # in most cases it would be used with rails hence with ActiveJob
 # later can think about adding support for differnt job adapters
 require_relative 'adapter'
-class ActiveRecordReindex::AsyncAdapter < ActiveRecordReindex::Adapter
+class ActiverecordReindex::AsyncAdapter < ActiverecordReindex::Adapter
 
   # Job wrapper. Queues elastic_index queue for each reindex
-  class UpdateJob < ActiveJob::Base
+  class UpdateJob < ::ActiveJob::Base
 
     # TODO: make queue name configurable
     queue_as :elastic_index

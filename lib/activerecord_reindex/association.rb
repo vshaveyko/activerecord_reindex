@@ -55,7 +55,7 @@ class ActiveRecord::Associations::Builder::Association
     # if association has dependent: :destroy or dependent: :delete_all
     # we skip this callback since destroyed records should reindex themselves
     def add_destroy_reindex_callback(model, reflection, async:)
-      return if reflection.options[:dependent].in? [:destroy, :delete_all]
+      return if [:destroy, :delete_all].include? reflection.options[:dependent]
 
       model.after_commit on: :destroy, &callback(async, reflection)
     end

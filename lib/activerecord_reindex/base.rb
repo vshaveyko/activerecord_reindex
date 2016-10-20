@@ -9,31 +9,38 @@ require_relative 'reindexer'
 # this methods requested in callbacks in association.rb
 class ActiveRecord::Base
 
-  class << self
+  def self.inherited(child)
+    super
+    class << child
 
-    attr_accessor :reindexer, :async_adapter, :sync_adapter, :sync_reindexable_reflections, :async_reindexable_reflections
+      attr_accessor :reindexer, :async_adapter, :sync_adapter, :sync_reindexable_reflections, :async_reindexable_reflections
 
+    end
+
+    # Init default values to prevent undefined method for nilClass error
+    child.sync_reindexable_reflections = []
+    child.async_reindexable_reflections = []
+
+    child.reindexer = ActiverecordReindex::Reindexer.new
+    # TODO: provide config for changing adapters
+    # For now can set adapter through writers inside class
+    child.async_adapter = ActiverecordReindex::AsyncAdapter
+    child.sync_adapter = ActiverecordReindex::SyncAdapter
   end
-
-  self.reindexer = ActiveRecordReindex::Reindexer.new
-  # TODO: provide config for changing adapters
-  # For now can set adapter through writers inside class
-  self.async_adapter = ActiveRecordReindex::AsyncAdapter
-  self.sync_adapter = ActiveRecordReindex::SyncAdapter
 
   private
 
-  # reindex reflection associations record skipping skip_record if applicable
-  # for why we need to skip some records see sync_adapter.rb doc
   def _reindex_async(reflection, skip_record: nil)
-    self.class.reindexer
-        .with_strategy(self.class.async_adapter)
-        .call(self, reflection: reflection, skip_record: skip_record)
+    _reindex(reflection, strategy: self.class.async_adapter, skip_record: skip_record)
   end
 
   def _reindex_sync(reflection, skip_record: nil)
+    _reindex(reflection, strategy: self.class.sync_adapter, skip_record: skip_record)
+  end
+
+  def _reindex(reflection, strategy:, skip_record:)
     self.class.reindexer
-        .with_strategy(self.class.sync_adapter)
+        .with_strategy(strategy)
         .call(self, reflection: reflection, skip_record: skip_record)
   end
 

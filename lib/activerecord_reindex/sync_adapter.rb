@@ -2,7 +2,7 @@
 # author: Vadim Shaveiko <@vshaveyko>
 # Reindexes records syncronously
 require_relative 'adapter'
-class ActiveRecordReindex::SyncAdapter < ActiveRecordReindex::Adapter
+class ActiverecordReindex::SyncAdapter < ActiverecordReindex::Adapter
 
   class << self
 
