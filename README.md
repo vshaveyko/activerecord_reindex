@@ -20,6 +20,7 @@ Or install it yourself as:
 
 ## Prerequisites
 
+  0. ActiveRecord 5.0+
   1. `elasticsearch-model` gem installed
   2. model that will be reindexed inherits from Elasticsearch::Model
   3. model is inherited from ActiveRecord::Base
@@ -91,6 +92,8 @@ If record of SuperTagging model was updated then:
 1. Add config for selecting reindex adapter.
 2. Add config for selection asyncronous reindex queue.
 3. Add config for selecting different job wrappers.
+4. Add support for other rails versions on demand(Currently only rails5)
+5. Update many-to-x associations records in single job(Configurable)
 
 ## Development
 
