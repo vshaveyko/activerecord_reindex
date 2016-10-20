@@ -27,6 +27,7 @@ Or install it yourself as:
 ## Usage
 
   To reindex associted records just add reindex: options to any ActiveRecord association.
+
   Acceptable values are `true, :async`.
 
   It will hook on:
@@ -69,22 +70,21 @@ class SuperTagging < ActiveRecord::Base
   belongs_to :tag, reindex: :async
 
 end
+```
 
 In this scenario:
 
 If record of Tag model was updated then:
-1. all taggings records associated with given tag will be queued as different jobs for reindexing.
-2. super_taggings will remain as is and will be ignored
+  1. all taggings records associated with given tag will be queued as different jobs for reindexing.
+  2. super_taggings will remain as is and will be ignored
 
 If record of Tagging model was updated then:
-1. associated tag will be Syncronously reindexed
-2. all associated taggings(except the one that initiated reindex) will be Asyncronously reindexed
+  1. associated tag will be Syncronously reindexed
+  2. all associated taggings(except the one that initiated reindex) will be Asyncronously reindexed
 
 If record of SuperTagging model was updated then:
-1. associated tag will be Syncronously reindexed
-2. all associated taggings will be Asyncronously reindexed
-
-```
+  1. associated tag will be Syncronously reindexed
+  2. all associated taggings will be Asyncronously reindexed
 
 ## TODO
 
@@ -100,7 +100,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/activerecord_reindex/fork )
+1. Fork it ( https://github.com/Health24/activerecord_reindex/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
