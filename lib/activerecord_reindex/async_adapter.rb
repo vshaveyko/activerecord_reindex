@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 # author: Vadim Shaveiko <@vshaveyko>
 
-# Asyncronouse reindex adapter
-# uses Jobs for reindexing records asyncronously
-# Using ActiveJob as dependency bcs activerecord is required for this so
-# in most cases it would be used with rails hence with ActiveJob
-# later can think about adding support for differnt job adapters
 require_relative 'adapter'
 module ActiverecordReindex
+  # Asyncronouse reindex adapter
+  # uses Jobs for reindexing records asyncronously
+  # Using ActiveJob as dependency bcs activerecord is required for this so
+  # in most cases it would be used with rails hence with ActiveJob
+  # later can think about adding support for differnt job adapters
   class AsyncAdapter < Adapter
 
     # Job wrapper. Queues elastic_index queue for each reindex
@@ -34,7 +34,7 @@ module ActiverecordReindex
       #   we will skip it in associations reindex to prevent recursive reindex and StackLevelTooDeep error
       def call(record, request_record)
         return unless _check_elasticsearch_connection(record.class)
-        UpdateJob.perform_later(record.class, record.id, request_record.class, request_record.id)
+        UpdateJob.perform_later(record.class.to_s, record.id, request_record.class.to_s, request_record.id)
       end
 
     end
