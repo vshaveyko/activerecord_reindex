@@ -84,7 +84,7 @@ If record of Tagging model was updated then:
   2. all associated taggings(except the one that initiated reindex) will be Asyncronously reindexed
 
 If record of SuperTagging model was updated then:
-  1. associated tag will be Syncronously reindexed
+  1. associated tag will be Asyncronously reindexed
   2. all associated taggings will be Asyncronously reindexed
 
 ## TODO
