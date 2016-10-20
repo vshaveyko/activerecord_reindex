@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 # author: Vadim Shaveiko <@vshaveyko>
+
 # Asyncronouse reindex adapter
 # uses Jobs for reindexing records asyncronously
 # Using ActiveJob as dependency bcs activerecord is required for this so

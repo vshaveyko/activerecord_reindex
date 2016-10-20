@@ -2,64 +2,51 @@
 # author: Vadim Shaveiko <@vshaveyko>
 require 'spec_helper'
 
-class Tag < ActiveRecord::Base
+class TagC < ActiveRecord::Base
+
+  self.table_name = 'tags'
 
   include Elasticsearch::Model
 
-  class << self
+  # rescue nil required to ignore errors from real elastic
+  # we're not interested in index status in this test
+  # we're only looking for correct hooks execution
+  after_update { |record| record.__elasticsearch__.update_document rescue nil }
 
-    attr_accessor :reindex_counter
-
-  end
-
-  self.reindex_counter = 0
-
-  has_many :taggings, reindex: true
-
-  def update_document
-    self.class.reindex_counter += 1
-  end
+  has_many :taggings, reindex: true, class_name: 'TagCging', foreign_key: :tag_id
 
 end
 
-class Tagging < ActiveRecord::Base
+class TagCging < ActiveRecord::Base
+
+  self.table_name = 'taggings'
 
   include Elasticsearch::Model
 
-  class << self
+  after_update { |record| record.__elasticsearch__.update_document rescue nil }
 
-    attr_accessor :reindex_counter
-
-  end
-
-  self.reindex_counter = 0
-
-  belongs_to :tag, reindex: true
-
-  def update_document
-    self.class.reindex_counter += 1
-  end
+  belongs_to :tag, reindex: true, class_name: 'TagC'
 
 end
 
-describe Tag do
+describe TagC do
 
-  let!(:tagging2) { Tagging.create!(name: 'tagging2') }
-  let!(:tagging) { Tagging.create!(tag: tag, name: 'tagging') }
-  let!(:tag) { Tag.create!(name: 'tag', taggings: [tagging2]) }
+  let!(:tagging2) { TagCging.create!(name: 'tagging2') }
+  let!(:tagging) { TagCging.create!(tag: tag, name: 'tagging') }
+  let!(:tag) { TagC.create!(name: 'tag', taggings: [tagging2]) }
 
   it 'updates document called on association after record update' do
-    Tagging.reindex_counter = 0
+    expect(ActiverecordReindex::SyncAdapter).to receive(:call).with(tagging2, tag)
+    expect(ActiverecordReindex::SyncAdapter).not_to receive(:call).with(tag, any_args)
 
     tag.update!(name: 'new tag name')
-    expect(Tagging.reindex_counter).to eq 1
   end
 
   it 'update document called on belongs_to assocation' do
-    Tag.reindex_counter = 0
+    expect(ActiverecordReindex::SyncAdapter).to receive(:call).with(tag, tagging)
+    expect(ActiverecordReindex::SyncAdapter).not_to receive(:call).with(tagging, any_args)
 
     tagging.update!(name: 'new tagging name')
-    expect(Tag.reindex_counter).to eq 1
   end
 
 end

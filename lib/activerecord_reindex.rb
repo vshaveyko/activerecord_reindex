@@ -7,8 +7,7 @@ require 'activerecord_reindex/base'
 require 'activerecord_reindex/association'
 require 'activerecord_reindex/association_reflection'
 
-require 'activerecord_reindex/through_reflection'
-require 'activerecord_reindex/update_index'
+require 'activerecord_reindex/update_document_monkey_patch'
 
 module ActiverecordReindex
 end

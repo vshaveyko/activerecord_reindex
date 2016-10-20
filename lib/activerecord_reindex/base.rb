@@ -28,15 +28,15 @@ class ActiveRecord::Base
     child.sync_adapter = ActiverecordReindex::SyncAdapter
   end
 
-  private
-
-  def _reindex_async(reflection, skip_record: nil)
+  def reindex_async(reflection, skip_record: nil)
     _reindex(reflection, strategy: self.class.async_adapter, skip_record: skip_record)
   end
 
-  def _reindex_sync(reflection, skip_record: nil)
+  def reindex_sync(reflection, skip_record: nil)
     _reindex(reflection, strategy: self.class.sync_adapter, skip_record: skip_record)
   end
+
+  private
 
   def _reindex(reflection, strategy:, skip_record:)
     self.class.reindexer

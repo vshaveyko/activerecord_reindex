@@ -61,12 +61,18 @@ class ActiveRecord::Associations::Builder::Association
     end
 
     # add callback to reindex associations on update
+    # if model inherited from Elasticsearch::Model it means it have own index in elasticsearch
+    # and therefore should reindex itself on update those triggering update_document hook
+    # to prevent double reindex we're not adding update callback on such models
     def add_update_reindex_callback(model, reflection, async:)
+      return if model < Elasticsearch::Model
+
       model.after_commit on: :update, &callback(async, reflection)
     end
 
+    # callback methods defined in ActiveRecord::Base monkeypatch
     def callback(async, reflection)
-      async ? -> { _reindex_async(reflection) } : -> { _reindex_sync(reflection) }
+      async ? -> { reindex_async(reflection) } : -> { reindex_sync(reflection) }
     end
 
   end
