@@ -9,6 +9,8 @@
 # 2. record destroyed
 # 3. record index updated
 # if :async it will add async callbacks in same cases
+require_relative 'reindex_hook'
+
 module ActiveRecord
   module Associations
     module Builder
