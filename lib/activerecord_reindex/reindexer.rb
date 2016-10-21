@@ -21,36 +21,43 @@ module ActiverecordReindex
       if reflection.collection?
         _reindex_collection(reflection, record, skip_record)
       else
-        associated_record = record.public_send(reflection.name)
-        return if associated_record == skip_record
-        _update_index(associated_record, record)
+        _reindex_single(reflection, record, skip_record)
       end
     end
 
     private
 
     # TODO: add bulk reindex if need performance
-    # raise if strategy was not specified or doesn't respond to call which is required for strategy
     # pass record to strategy and execute reindex
-    # clear strategy to not mess up future reindexing
     def _update_index(associated_record, record)
-      _check_strategy
-
       @strategy.call(associated_record, record)
-
-      _clear_strategy
     end
 
+    # raise if strategy was not specified or doesn't respond to call which is required for strategy
     def _check_strategy
       raise ArgumentError, 'No strategy specified.' unless @strategy
       raise ArgumentError, "Strategy specified incorrect. Check if #{@strategy} responds to :call." unless @strategy.respond_to? :call
     end
 
+    # clear strategy to not mess up future reindexing
     def _clear_strategy
       @strategy = nil
     end
 
+    # TODO: got clearing collection bug, write test for it
+    def _reindex_single(reflection, record, skip_record)
+      _check_strategy
+
+      associated_record = record.public_send(reflection.name)
+      return if associated_record == skip_record
+      _update_index(associated_record, record)
+
+      _clear_strategy
+    end
+
     def _reindex_collection(reflection, record, skip_record)
+      _check_strategy
+
       collection = record.public_send(reflection.name)
 
       collection -= [skip_record] if reflection.klass == skip_record.class
@@ -58,6 +65,8 @@ module ActiverecordReindex
       collection.each do |associated_record|
         _update_index(associated_record, record)
       end
+
+      _clear_strategy
     end
 
   end
