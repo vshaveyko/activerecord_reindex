@@ -70,6 +70,8 @@ module ActiveRecord
           def add_update_reindex_callback(model, reflection, async:)
             return if model < Elasticsearch::Model
 
+            # for why it is needed see reindex_hook.rb
+            model.include ActiverecordReindex::ReindexHook
             model.after_commit on: :update, &callback(async, reflection)
           end
 

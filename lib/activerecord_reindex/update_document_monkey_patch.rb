@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 # author: Vadim Shaveiko <@vshaveyko>
+require 'activerecord_reindex/reflection_reindex'
+
 module Elasticsearch
   module Model
     module Indexing
       module InstanceMethods
+
+        include ActiverecordReindex::ReflectionReindex
 
         alias original_update_document update_document
 
@@ -11,26 +15,9 @@ module Elasticsearch
         # use +super+ and hook on reindex to reindex associations
         # for why request_record needed here and what it is see sync_adapter.rb
         def update_document(*args, request_record: nil)
-          if _active_record_model?(self.class)
-            _reindex_reflections(self.class, request_record)
-          end
+          # defined in ActiverecordReindex::ReflectionReindex
+          update_document_hook(request_record)
           original_update_document(*args)
-        end
-
-        private
-
-        def _active_record_model?(klass)
-          klass < ActiveRecord::Base
-        end
-
-        def _reindex_reflections(klass, request_record)
-          klass.sync_reindexable_reflections.each do |reflection|
-            target.reindex_sync(reflection, skip_record: request_record)
-          end
-
-          klass.async_reindexable_reflections.each do |reflection|
-            target.reindex_async(reflection, skip_record: request_record)
-          end
         end
 
       end
