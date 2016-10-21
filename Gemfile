@@ -2,9 +2,12 @@
 # author: Vadim Shaveiko <@vshaveyko>
 source 'https://rubygems.org'
 
-group :development, :test do
-  gem 'activerecord-nulldb-adapter', github: 'mnoack/nulldb', ref: 'aa36e3c'
-end
-
 # Specify your gem's dependencies in activerecord_reindex.gemspec
 gemspec
+
+group :test do
+  gem 'rspec-rails', '3.0.0'
+  gem 'sqlite3'
+  gem 'database_cleaner'
+  gem 'jazz_hands'
+end
