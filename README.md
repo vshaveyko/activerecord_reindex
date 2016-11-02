@@ -26,6 +26,20 @@ Or install it yourself as:
   3. model is inherited from ActiveRecord::Base
 
 ## Usage
+  Add this to your resque:setup rake task(or define it this way):
+
+  ```ruby
+
+    namespace :resque do
+      task :setup do
+        require 'resque'
+        require 'activerecord_reindex'
+      end
+    end
+
+  ```
+
+  This will make gem's job class available for jobs.
 
   To reindex associted records just add reindex: options to any ActiveRecord association.
 
