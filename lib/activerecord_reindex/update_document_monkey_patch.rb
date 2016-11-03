@@ -17,7 +17,14 @@ module Elasticsearch
         def update_document(*args, request_record: nil)
           # defined in ActiverecordReindex::ReflectionReindex
           update_document_hook(request_record)
-          original_update_document(*args)
+
+          # If request_record passed - always use index_document to prevent
+          # update_document call on non-indexed record
+          if request_record
+            index_document(*args)
+          else
+            original_update_document(*args)
+          end
         end
 
       end
