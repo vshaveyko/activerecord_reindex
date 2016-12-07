@@ -4,11 +4,10 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'pry'
 
+require "active_record/railtie"
 require 'rspec/rails'
-require 'rails/all'
 require 'database_cleaner'
 require 'jazz_hands'
-
 require 'activerecord_reindex'
 
 RSpec.configure do |config|

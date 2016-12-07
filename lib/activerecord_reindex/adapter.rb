@@ -26,7 +26,7 @@ module ActiverecordReindex
     #   request record is record that initted reindex for current record as association
     #   we will skip it in associations reindex to prevent recursive reindex and StackLevelTooDeep error
     #
-    def self.call(record: nil, records: nil, request_record)
+    def self.call(request_record, record: nil, records: nil)
       if record
         return unless _check_elasticsearch_connection(record.class)
 

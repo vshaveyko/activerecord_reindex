@@ -16,7 +16,7 @@ module ActiverecordReindex
     #
     class UpdateJob < ::ActiveJob::Base
 
-      queue_as RailsApiDoc.config.index_queue
+      queue_as ActiverecordReindex.config.index_queue
 
       def perform(klass, id, request_record_klass, request_record_id)
         klass = klass.constantize
@@ -30,7 +30,7 @@ module ActiverecordReindex
 
     class MassUpdateJob < ::ActiveJob::Base
 
-      queue_as RailsApiDoc.config.index_queue
+      queue_as ActiverecordReindex.config.index_queue
 
       def perform(klass, ids, request_record_klass, request_record_id)
         klass = klass.constantize
