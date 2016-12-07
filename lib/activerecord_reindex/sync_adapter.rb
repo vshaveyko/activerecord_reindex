@@ -7,19 +7,22 @@ module ActiverecordReindex
 
     class << self
 
-      # updates index directly in elasticsearch through
-      # Elasticsearch::Model instance method
-      # if class not inherited from Elasticsearch::Model it skips since it cannot be reindexing
-      # TODO: show error\warning about trying to reindex record that is not connection to elastic
-      # ***nasty-stuff***
-      #   hooking into update_document has sudden side-effect
-      #   if associations defined two-way they will trigger reindex recursively and result in StackLevelTooDeep
-      #   hence to prevent this we're passing request_record to adapter
-      #   request record is record that initted reindex for current record as association
-      #   we will skip it in associations reindex to prevent recursive reindex and StackLevelTooDeep error
-      def call(record, request_record)
-        return unless _check_elasticsearch_connection(record.class)
+      private
+
+      def _single_reindex(request_record, record)
+        _update_index_on_record(record, request_record)
+      end
+
+      def _mass_reindex(request_record, _class_name, records)
+        records.each do |record|
+          _update_index_on_record(record, request_record)
+        end
+      end
+
+      def _update_index_on_record(record, request_record)
         record.__elasticsearch__.update_document(request_record: request_record)
+      rescue Elasticsearch::Transport::Transport::Errors::NotFound
+        record.__elasticsearch__.index_document
       end
 
     end
