@@ -101,6 +101,17 @@ If record of SuperTagging model was updated then:
   1. associated tag will be Asyncronously reindexed
   2. all associated taggings will be Asyncronously reindexed
 
+## Configure
+```ruby
+# these are the defaults
+# config/initializers/activerecord_reindex.rb
+ActiverecordReindex.configure do |config|
+  config.index_queue = :elastic_index
+  config.index_class = ActiverecordReindex::AsyncAdapter::UpdateJob
+  config.mass_index_class = ActiverecordReindex::AsyncAdapter::MassUpdateJob
+end
+```
+
 ## TODO
 
 1. Add config for selecting reindex adapter.

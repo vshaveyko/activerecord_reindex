@@ -5,6 +5,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'pry'
 
 require 'rspec/rails'
+require 'rails/all'
 require 'database_cleaner'
 require 'jazz_hands'
 
