@@ -75,10 +75,10 @@ module ActiveRecord
             # for why it is needed see reindex_hook.rb
             model.include ActiverecordReindex::ReindexHook
 
-            model.after_commit on: :update, proc {
+            model.after_commit on: :update do
               next unless changed_index_relevant_attributes?
               callback(async, reflection).call
-            }
+            end
           end
 
           # callback methods defined in ActiveRecord::Base monkeypatch
