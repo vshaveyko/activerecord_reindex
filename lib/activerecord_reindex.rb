@@ -19,7 +19,7 @@ module ActiverecordReindex
   class << self
 
     def configure
-      yield configuration
+      yield config
     end
 
     def config
