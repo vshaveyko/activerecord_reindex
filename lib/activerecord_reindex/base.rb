@@ -47,7 +47,7 @@ module ActiveRecord
     end
 
     def changed_index_relevant_attributes?
-      return unless self.class.reindex_attr_blacklist && self.class.reindex_attr_whitelist
+      return unless self.class.reindex_attr_blacklist || self.class.reindex_attr_whitelist
       changed = changed_attributes.keys
       wl = self.class.reindex_attr_whitelist.map(&:to_sym)
       bl = self.class.reindex_attr_blacklist.map(&:to_sym)

@@ -1,7 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
 # author: Vadim Shaveiko <@vshaveyko>
-
 # Adds reindex option to associations
 # values accepted are true, :async. Default false.
 # If true it will add syncronous elasticsearch reindex callbacks on:
@@ -75,7 +74,7 @@ module ActiveRecord
             # for why it is needed see reindex_hook.rb
             model.include ActiverecordReindex::ReindexHook
 
-            model.after_commit on: :update do
+            model.after_commit(on: :update) do
               next unless changed_index_relevant_attributes?
               callback(async, reflection).call
             end
