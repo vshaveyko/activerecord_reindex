@@ -11,8 +11,14 @@ module ActiverecordReindex
 
     def initialize
       @index_queue = :elastic_index
-      @index_class = ActiverecordReindex::AsyncAdapter::UpdateJob
-      @mass_index_class = ActiverecordReindex::AsyncAdapter::MassUpdateJob
+    end
+
+    def index_class
+      @index_class || ActiverecordReindex::AsyncAdapter::UpdateJob
+    end
+
+    def mass_index_class
+      @mass_index_class || ActiverecordReindex::AsyncAdapter::MassUpdateJob
     end
 
   end
