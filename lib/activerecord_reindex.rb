@@ -8,7 +8,7 @@ module ActiverecordReindex
 
     attr_accessor :index_queue, :index_class, :mass_index_class
 
-    def initilize
+    def initialize
       @index_queue = :elastic_index
       @index_class = ActiverecordReindex::AsyncAdapter::UpdateJob
       @mass_index_class = ActiverecordReindex::AsyncAdapter::MassUpdateJob
