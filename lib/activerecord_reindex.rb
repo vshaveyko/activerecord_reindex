@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 # author: Vadim Shaveiko <@vshaveyko>
 require 'activerecord_reindex/version'
-require 'activerecord_reindex/async_adapter'
 
 module ActiverecordReindex
 
