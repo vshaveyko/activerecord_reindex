@@ -14,7 +14,8 @@ module ActiveRecord
       super
       class << child
 
-        attr_accessor :reindexer, :async_adapter, :sync_adapter, :sync_reindexable_reflections, :async_reindexable_reflections
+        attr_accessor :reindexer, :async_adapter, :sync_adapter, :sync_reindexable_reflections,
+                      :async_reindexable_reflections, :reindex_attr_blacklist, :reindex_attr_whitelist
 
       end
 
@@ -43,6 +44,27 @@ module ActiveRecord
       self.class.reindexer
           .with_strategy(strategy)
           .call(self, reflection: reflection, skip_record: skip_record)
+    end
+
+    def changed_index_relevant_attributes?
+      return unless self.class.reindex_attr_blacklist && self.class.reindex_attr_whitelist
+      changed = changed_attributes.keys
+      wl = self.class.reindex_attr_whitelist.map(&:to_sym)
+      bl = self.class.reindex_attr_blacklist.map(&:to_sym)
+
+      if wl
+        whitelisted = wl & changed
+      else
+        whitelisted = changed
+      end
+
+      if bl
+        blacklisted = changed - bl
+      else
+        blacklisted = []
+      end
+
+      !(whitelisted - blacklisted).empty?
     end
 
   end
