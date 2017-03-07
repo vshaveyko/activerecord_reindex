@@ -64,6 +64,21 @@ Or install it yourself as:
   reindex: :async # records will be reindexed (Asyncronously) using ActiveJob as adapter.
   ```
 
+## Whitelisting attributes
+
+  There may be a case where you want to trigger recursive reindexation only if some attribute changed. You can solve this with following configuration:
+
+  ```ruby
+  class Tag < ActiveRecord::Base
+
+    self.reindex_attr_whitelist = ['name']
+    self.reindex_attr_blacklist = ['email']
+
+  end
+  ```
+
+  whitelist/blacklist can be optionally defined in any given model if desired
+
 ## Examples
 
 ```ruby
