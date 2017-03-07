@@ -53,7 +53,7 @@ module ActiverecordReindex
       # uses configured job class otherwise
       #
       def _single_reindex(request_record, record)
-        ActiverecordReindex::Config.index_class
+        ActiverecordReindex.config.index_class
           .perform_later(record.class.name,
                          record.id,
                          request_record.class.name,
@@ -68,7 +68,7 @@ module ActiverecordReindex
       # create one job that will reindex all records internally
       #
       def _mass_reindex(request_record, class_name, records)
-        ActiverecordReindex::Config.mass_index_class
+        ActiverecordReindex.config.mass_index_class
           .perform_later(class_name,
                          records.ids,
                          request_record.class.name,

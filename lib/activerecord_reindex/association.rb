@@ -1,7 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
 # author: Vadim Shaveiko <@vshaveyko>
-
 # Adds reindex option to associations
 # values accepted are true, :async. Default false.
 # If true it will add syncronous elasticsearch reindex callbacks on:
@@ -62,7 +61,11 @@ module ActiveRecord
           def add_destroy_reindex_callback(model, reflection, async:)
             return if [:destroy, :delete_all].include? reflection.options[:dependent]
 
-            model.after_commit on: :destroy, &callback(async, reflection)
+            destroy_callback = callback(async, reflection)
+
+            model.after_commit(on: :destroy) do
+              destroy_callback.call(self)
+            end
           end
 
           # add callback to reindex associations on update
@@ -74,12 +77,18 @@ module ActiveRecord
 
             # for why it is needed see reindex_hook.rb
             model.include ActiverecordReindex::ReindexHook
-            model.after_commit on: :update, &callback(async, reflection)
+
+            update_callback = callback(async, reflection)
+
+            model.after_commit(on: :update) do
+              next unless changed_index_relevant_attributes?
+              update_callback.call(self)
+            end
           end
 
           # callback methods defined in ActiveRecord::Base monkeypatch
           def callback(async, reflection)
-            async ? -> { reindex_async(reflection) } : -> { reindex_sync(reflection) }
+            async ? ->(record) { record.reindex_async(reflection) } : ->(record) { record.reindex_sync(reflection) }
           end
 
         end

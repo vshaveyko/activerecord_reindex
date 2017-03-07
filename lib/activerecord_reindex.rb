@@ -8,10 +8,16 @@ module ActiverecordReindex
 
     attr_accessor :index_queue, :index_class, :mass_index_class
 
-    def initilize
+    def initialize
       @index_queue = :elastic_index
-      @index_class = ActiverecordReindex::AsyncAdapter::UpdateJob
-      @mass_index_class = ActiverecordReindex::AsyncAdapter::MassUpdateJob
+    end
+
+    def index_class
+      @index_class || ActiverecordReindex::AsyncAdapter::UpdateJob
+    end
+
+    def mass_index_class
+      @mass_index_class || ActiverecordReindex::AsyncAdapter::MassUpdateJob
     end
 
   end
@@ -19,7 +25,7 @@ module ActiverecordReindex
   class << self
 
     def configure
-      yield configuration
+      yield config
     end
 
     def config
