@@ -26,7 +26,12 @@ module ActiveRecord
       child.reindexer = ActiverecordReindex::Reindexer.new
       # TODO: provide config for changing adapters
       # For now can set adapter through writers inside class
-      child.async_adapter = ActiverecordReindex::AsyncAdapter
+      if ActiverecordReindex.config.async_reindex_only_in_production? && !Rails.env.production?
+        child.async_adapter = ActiverecordReindex::SyncAdapter
+      else
+        child.async_adapter = ActiverecordReindex::AsyncAdapter
+      end
+
       child.sync_adapter = ActiverecordReindex::SyncAdapter
     end
 

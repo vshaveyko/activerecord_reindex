@@ -124,17 +124,9 @@ ActiverecordReindex.configure do |config|
   config.index_queue = :elastic_index
   config.index_class = ActiverecordReindex::AsyncAdapter::UpdateJob
   config.mass_index_class = ActiverecordReindex::AsyncAdapter::MassUpdateJob
+  config.async_reindex_only_in_production = false
 end
 ```
-
-## TODO
-
-1. Add config for selecting reindex adapter.
-2. Add config for selection asyncronous reindex queue.
-3. Add config for selecting different job wrappers.
-4. Add support for other rails versions on demand(Currently only rails5)
-5. Update many-to-x associations records in single job(Configurable)
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
