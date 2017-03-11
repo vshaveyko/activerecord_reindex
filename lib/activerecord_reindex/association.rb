@@ -17,7 +17,7 @@ module ActiveRecord
 
         class << self
 
-          alias original_valid_options valid_options
+          alias original_valid_options_ar_reindex valid_options
 
           # This method monkey patches ActiveRecord valid_options to add one more valid option :reindex
           # Examples:
@@ -26,7 +26,7 @@ module ActiveRecord
           #   has_many :tags, reindex: async
           #   has_many :tags, through: :taggings, reindex: true
           def valid_options(*args)
-            original_valid_options(*args) + [:reindex]
+            original_valid_options_ar_reindex(*args) + [:reindex]
           end
 
           alias original_define_callbacks define_callbacks
