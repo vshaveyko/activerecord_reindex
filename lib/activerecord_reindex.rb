@@ -6,10 +6,15 @@ module ActiverecordReindex
 
   class Config
 
-    attr_accessor :index_queue, :index_class, :mass_index_class
+    attr_accessor :index_queue, :index_class, :mass_index_class, :async_reindex_only_in_production
 
     def initialize
       @index_queue = :elastic_index
+      @async_reindex_only_in_production = false
+    end
+
+    def async_reindex_only_in_production?
+      @async_reindex_only_in_production
     end
 
     def index_class
